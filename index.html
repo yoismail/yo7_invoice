@@ -3586,12 +3586,19 @@
     <p style="font-size:13.5px;color:var(--muted);margin:0 0 14px;">Add anything you'd like before sending${c ? ' to ' + escapeHtml(c.name) : ''}. The link to view the invoice stays in the message automatically. Where your browser supports it, the actual PDF attaches too, not just the link.</p>
     <div class="field"><label>Message</label><textarea id="share-message-text" rows="7">${escapeHtml(defaultBody)}</textarea></div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">
-      <button class="btn" style="justify-content:flex-start;padding:14px 16px;" data-action="share-whatsapp" data-id="${inv.id}" ${c && c.phone ? '' : 'disabled title="No phone number on file for this customer"'}>
-        <svg class="icon" data-feather="message-circle" style="color:#25D366;"></svg>&nbsp; Share via WhatsApp
-      </button>
-      <button class="btn" style="justify-content:flex-start;padding:14px 16px;" data-action="share-email" data-id="${inv.id}" ${c && c.email ? '' : 'disabled title="No email on file for this customer"'}>
-        <svg class="icon" data-feather="mail" style="color:#1D5FA8;"></svg>&nbsp; Share via email
-      </button>
+      <div>
+        <button class="btn" style="justify-content:flex-start;padding:14px 16px;width:100%;" data-action="share-whatsapp" data-id="${inv.id}" ${c && c.phone ? '' : 'disabled'}>
+          <svg class="icon" data-feather="message-circle" style="color:#25D366;"></svg>&nbsp; Share via WhatsApp
+        </button>
+        ${c && !c.phone ? `<div class="hint" style="margin-top:6px;">No phone number on file for ${escapeHtml(c.name)}. <button type="button" data-action="edit-customer" data-id="${c.id}" style="background:none;border:none;padding:0;font:inherit;color:var(--leaf-dark);font-weight:600;cursor:pointer;">Add one</button> to share via WhatsApp.</div>` : ''}
+      </div>
+      <div>
+        <button class="btn" style="justify-content:flex-start;padding:14px 16px;width:100%;" data-action="share-email" data-id="${inv.id}" ${c && c.email ? '' : 'disabled'}>
+          <svg class="icon" data-feather="mail" style="color:#1D5FA8;"></svg>&nbsp; Share via email
+        </button>
+        ${c && !c.email ? `<div class="hint" style="margin-top:6px;">No email on file for ${escapeHtml(c.name)}. <button type="button" data-action="edit-customer" data-id="${c.id}" style="background:none;border:none;padding:0;font:inherit;color:var(--leaf-dark);font-weight:600;cursor:pointer;">Add one</button> to share via email.</div>` : ''}
+      </div>
+      ${!c ? `<div class="hint">This invoice has no customer on file, so there's nowhere to send a WhatsApp message or email to.</div>` : ''}
     </div>
   `, {
                     title: 'Share invoice',
